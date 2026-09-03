@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Product | Product Listing</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: #f5f6f8;
+            color: #202124;
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 35px 20px 60px;
+        }
+
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            gap: 20px;
+        }
+
+        .header-left h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .header-left p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            border: 1px solid #d9dde5;
+            background: #fff;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #f1f3f5;
+        }
+
+
+        .form-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e1e4e8;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            color: #737985;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+
+        .form-group {
+            margin-bottom: 19px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 650;
+            margin-bottom: 7px;
+        }
+
+        .required {
+            color: #e5484d;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid #d5d9e0;
+            border-radius: 8px;
+            padding: 12px 13px;
+            font-size: 14px;
+            color: #222;
+            outline: none;
+            background: #fff;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #111827;
+            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+        }
+
+        textarea {
+            min-height: 145px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .input-prefix {
+            position: relative;
+        }
+
+        .input-prefix span {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .input-prefix input {
+            padding-left: 29px;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #858b96;
+            margin-top: 6px;
+        }
+
+        .counter {
+            text-align: right;
+            font-size: 11px;
+            color: #8a9099;
+            margin-top: 5px;
+        }
+
+
+        .upload-box {
+            border: 1.5px dashed #c9ced7;
+            border-radius: 10px;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background: #fafbfc;
+            transition: 0.2s;
+        }
+
+        .upload-box:hover {
+            border-color: #111827;
+            background: #f6f7f8;
+        }
+
+        .upload-content {
+            padding: 30px;
+        }
+
+        .upload-icon {
+            width: 55px;
+            height: 55px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: #eceef1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .upload-content h3 {
+            font-size: 15px;
+            margin-bottom: 7px;
+        }
+
+        .upload-content p {
+            font-size: 12px;
+            color: #777e89;
+            line-height: 1.5;
+        }
+
+        #imageInput {
+            display: none;
+        }
+
+        #imagePreview {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: absolute;
+            inset: 0;
+            background: #fff;
+        }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            border: none;
+            background: #fff;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            font-size: 16px;
+            z-index: 3;
+        }
+
+
+        .tags-box {
+            min-height: 48px;
+            border: 1px solid #d5d9e0;
+            border-radius: 8px;
+            padding: 7px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .tags-box:focus-within {
+            border-color: #111827;
+            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+        }
+
+        .tags-box input {
+            border: none;
+            box-shadow: none !important;
+            padding: 7px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .tag {
+            background: #eef0f3;
+            padding: 6px 9px;
+            border-radius: 6px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .tag button {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+
+        .status-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-option {
+            flex: 1;
+            border: 1px solid #d5d9e0;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            gap: 9px;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .status-option input {
+            width: auto;
+        }
+
+        .status-option:has(input:checked) {
+            border-color: #111827;
+            background: #f6f7f8;
+        }
+
+
+        .sticky {
+            position: sticky;
+            top: 20px;
+        }
+
+        .price-preview {
+            background: #f6f7f8;
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 15px;
+        }
+
+        .preview-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #666d78;
+        }
+
+        .preview-total {
+            border-top: 1px solid #dfe2e6;
+            padding-top: 13px;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 16px;
+            color: #202124;
+        }
+
+        .action-buttons {
+            display: grid;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 13px 16px;
+            font-size: 14px;
+            font-weight: 650;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: #111827;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #000;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            border: 1px solid #d5d9e0;
+            color: #222;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f6f8;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #202124;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 850px) {
+            .form-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sticky {
+                position: static;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page {
+                padding: 20px 14px 40px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .status-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="page">
+
+
+        <header class="page-header">
+            <div class="header-left">
+                <h1>Add Product</h1>
+                <p>Create a new product listing for your store.</p>
+            </div>
+
+            <button class="back-btn" type="button" onclick="goBack()">
+                ← Back
+            </button>
+        </header>
+
+
+        <form id="productForm">
+
+            <div class="form-layout">
+                <div>
+
+                    <!-- Basic Information -->
+                    <section class="card">
+                        <h2 class="card-title">Basic Information</h2>
+                        <p class="card-subtitle">
+                            Add the basic details of your product.
+                        </p>
+
+                        <div class="form-group">
+                            <label for="productName">
+                                Product Name <span class="required">*</span>
+                            </label>
+
+                            <input type="text" id="productName" placeholder="e.g. Premium Cotton T-Shirt"
+                                maxlength="100" required />
+
+                            <div class="counter">
+                                <span id="nameCount">0</span>/100
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="category">
+                                    Category <span class="required">*</span>
+                                </label>
+
+                                <select id="category" required>
+                                    <option value="">Select category</option>
+                                    <option>Electronics</option>
+                                    <option>Clothing</option>
+                                    <option>Footwear</option>
+                                    <option>Accessories</option>
+                                    <option>Home & Living</option>
+                                    <option>Beauty</option>
+                                    <option>Sports</option>
+                                    <option>Books</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="sku">SKU</label>
+
+                                <input type="text" id="sku" placeholder="e.g. TSH-001-BLK" />
+
+                                <p class="help-text">
+                                    Unique product identification code.
+                                </p>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <!-- Product Description -->
+                    <section class="card">
+                        <h2 class="card-title">Product Description</h2>
+                        <p class="card-subtitle">
+                            Describe your product and its key features.
+                        </p>
+
+                        <div class="form-group">
+                            <label for="description">
+                                Description <span class="required">*</span>
+                            </label>
+
+                            <textarea id="description" maxlength="1000"
+                                placeholder="Write a detailed description of your product..." required></textarea>
+
+                            <div class="counter">
+                                <span id="descriptionCount">0</span>/1000
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>Product Tags</label>
+
+                            <div class="tags-box" id="tagsBox">
+                                <input type="text" id="tagInput" placeholder="Type a tag and press Enter" />
+                            </div>
+
+                            <p class="help-text">
+                                Add relevant keywords to help customers find your product.
+                            </p>
+                        </div>
+                    </section>
+
+
+                    <!-- Pricing -->
+                    <section class="card">
+                        <h2 class="card-title">Pricing & Inventory</h2>
+                        <p class="card-subtitle">
+                            Set your product price and available inventory.
+                        </p>
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="price">
+                                    Price <span class="required">*</span>
+                                </label>
+
+                                <div class="input-prefix">
+                                    <span>₹</span>
+                                    <input type="number" id="price" min="0" step="0.01" placeholder="0.00" required />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="discountPrice">
+                                    Discount Price
+                                </label>
+
+                                <div class="input-prefix">
+                                    <span>₹</span>
+                                    <input type="number" id="discountPrice" min="0" step="0.01" placeholder="0.00" />
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="stock">
+                                    Stock Quantity <span class="required">*</span>
+                                </label>
+
+                                <input type="number" id="stock" min="0" placeholder="e.g. 50" required />
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="lowStock">
+                                    Low Stock Alert
+                                </label>
+
+                                <input type="number" id="lowStock" min="0" value="5" placeholder="e.g. 5" />
+
+                                <p class="help-text">
+                                    Notify when inventory goes below this number.
+                                </p>
+                            </div>
+
+                        </div>
+                    </section>
+
+                </div>
+
+
+                <!-- RIGHT COLUMN -->
+                <aside class="sticky">
+
+                    <!-- Image Upload -->
+                    <section class="card">
+                        <h2 class="card-title">Product Image</h2>
+                        <p class="card-subtitle">
+                            Upload a high-quality product image.
+                        </p>
+
+                        <div class="upload-box" id="uploadBox">
+
+                            <input type="file" id="imageInput" accept="image/*" />
+
+                            <div class="upload-content" id="uploadContent">
+                                <div class="upload-icon">↑</div>
+
+                                <h3>Upload product image</h3>
+
+                                <p>
+                                    Click to browse or drag & drop<br />
+                                    PNG, JPG or WEBP · Max 5MB
+                                </p>
+                            </div>
+
+                            <img id="imagePreview" alt="Product preview" />
+
+                            <button type="button" class="remove-image" id="removeImage">
+                                ×
+                            </button>
+
+                        </div>
+                    </section>
+
+
+                    <!-- Status -->
+                    <section class="card">
+                        <h2 class="card-title">Status</h2>
+                        <p class="card-subtitle">
+                            Choose how this product should appear.
+                        </p>
+
+                        <div class="status-options">
+
+                            <label class="status-option">
+                                <input type="radio" name="status" value="active" checked />
+                                Active
+                            </label>
+
+                            <label class="status-option">
+                                <input type="radio" name="status" value="draft" />
+                                Draft
+                            </label>
+
+                        </div>
+                    </section>
+
+
+                    <!-- Price Preview -->
+                    <section class="card">
+
+                        <h2 class="card-title">Price Preview</h2>
+
+                        <div class="price-preview">
+
+                            <div class="preview-row">
+                                <span>Original price</span>
+                                <strong id="originalPreview">₹0.00</strong>
+                            </div>
+
+                            <div class="preview-row">
+                                <span>Discount</span>
+                                <strong id="discountPreview">₹0.00</strong>
+                            </div>
+
+                            <div class="preview-total">
+                                <span>Selling price</span>
+                                <span id="sellingPreview">₹0.00</span>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- Actions -->
+                    <section class="card">
+
+                        <div class="action-buttons">
+
+                            <button type="submit" class="btn btn-primary">
+                                Save Product
+                            </button>
+
+                            <button type="button" class="btn btn-secondary" id="resetBtn">
+                                Reset Form
+                            </button>
+
+                        </div>
+
+                    </section>
+
+                </aside>
+
+            </div>
+
+        </form>
+
+
+        <!-- Product List -->
+        <section class="card" style="margin-top: 20px;">
+            <h2 class="card-title">Product List</h2>
+
+            <div id="productList">
+                <p>No products added yet.</p>
+            </div>
+        </section>
+
+
+
+    </main>
+
+    <script>
+        const $ = id => document.getElementById(id);
+
+        const form = $("productForm");
+        const name = $("productName");
+        const description = $("description");
+        const price = $("price");
+        const discount = $("discountPrice");
+        const image = $("imageInput");
+        const preview = $("imagePreview");
+        const upload = $("uploadContent");
+
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+
+
+        /* Character Counter */
+        name.oninput = () => $("nameCount").textContent = name.value.length;
+
+        description.oninput = () =>
+            $("descriptionCount").textContent = description.value.length;
+
+
+        /* Price Preview */
+        function updatePrice() {
+            let p = Number(price.value) || 0;
+            let d = Number(discount.value) || 0;
+
+            $("originalPreview").textContent = `₹${p.toFixed(2)}`;
+            $("discountPreview").textContent = `₹${d.toFixed(2)}`;
+            $("sellingPreview").textContent =
+                `₹${Math.max(p - d, 0).toFixed(2)}`;
+        }
+
+        price.oninput = updatePrice;
+        discount.oninput = updatePrice;
+
+
+        /* Image Preview */
+        image.onchange = () => {
+            const file = image.files[0];
+
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = "block";
+                upload.style.display = "none";
+            }
+        };
+
+
+        /* Save Product */
+        form.onsubmit = e => {
+            e.preventDefault();
+
+            const product = {
+                name: name.value,
+                category: $("category").value,
+                sku: $("sku").value,
+                price: Number(price.value),
+                discount: Number(discount.value) || 0,
+                stock: Number($("stock").value),
+                status: document.querySelector('input[name="status"]:checked').value
+            };
+
+            products.push(product);
+
+            localStorage.setItem("products", JSON.stringify(products));
+
+            showProducts();
+
+            alert("Product saved successfully!");
+            form.reset();
+
+            $("nameCount").textContent = "0";
+            $("descriptionCount").textContent = "0";
+
+            preview.style.display = "none";
+            upload.style.display = "block";
+
+            updatePrice();
+
+        };
+
+
+
+
+        /* Show Product List */
+        function showProducts() {
+            const list = $("productList");
+
+            if (products.length === 0) {
+                list.innerHTML = "<p>No products added yet.</p>";
+                return;
+            }
+
+            list.innerHTML = products.map((p, i) => `
+        <div style="border:1px solid #ddd; padding:15px; margin-top:10px; border-radius:8px;">
+            <h3>${p.name}</h3>
+            <p>Category: ${p.category}</p>
+            <p>SKU: ${p.sku}</p>
+            <p>Price: ₹${p.price}</p>
+            <p>Discount: ₹${p.discount}</p>
+            <p>Stock: ${p.stock}</p>
+            <p>Status: ${p.status}</p>
+
+            <button type="button" onclick="deleteProduct(${i})">
+                Delete
+            </button>
+        </div>
+    `).join("");
+        }
+
+
+        /* Delete Product */
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            localStorage.setItem("products", JSON.stringify(products));
+            showProducts();
+        }
+
+
+        /* Reset */
+        $("resetBtn").onclick = () => {
+            form.reset();
+
+            $("nameCount").textContent = "0";
+            $("descriptionCount").textContent = "0";
+
+            preview.style.display = "none";
+            upload.style.display = "block";
+
+            updatePrice();
+        };
+
+
+        /* Back */
+        function goBack() {
+            history.back();
+        }
+
+
+        /* Load Products */
+        showProducts();
+    </script>
+</body>
+
+</html>
